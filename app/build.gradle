@@ -45,6 +45,7 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "androidx.core:core-ktx:$androidKTXVersion"
+    implementation 'com.google.android.material:material:1.1.0'
 
     // Architecture Components
     implementation "androidx.room:room-runtime:$roomVersion"

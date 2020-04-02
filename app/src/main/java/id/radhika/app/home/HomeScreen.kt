@@ -19,6 +19,7 @@ class HomeScreen : BaseFragment<FragmentHomeBinding, HomeVM, HomeDao>(FragmentHo
     }
 
     override fun render() = { data: HomeDao ->
+        binding.progressIndicator.visibility = if (data.isLoading) View.VISIBLE else View.GONE
         binding.textContent.text = data.count.toString()
     }
 
