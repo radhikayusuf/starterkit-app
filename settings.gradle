@@ -1,0 +1,5 @@
+rootProject.name='starterkit-app'
+include ':app'
+include ':lib_data'
+include ':lib_ui'
+include ':lib_mvvm'
