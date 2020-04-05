@@ -10,7 +10,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/application" />
+            <option value="$PROJECT_DIR$/feature_dummy" />
             <option value="$PROJECT_DIR$/lib_data" />
             <option value="$PROJECT_DIR$/lib_mvvm" />
             <option value="$PROJECT_DIR$/lib_ui" />
