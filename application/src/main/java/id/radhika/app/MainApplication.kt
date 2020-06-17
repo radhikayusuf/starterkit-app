@@ -7,4 +7,8 @@ import android.app.Application
  * on 05/Apr/2020
  **/
 class MainApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+    }
 }
