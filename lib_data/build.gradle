@@ -26,6 +26,10 @@ dependencies {
 
     kapt "androidx.room:room-compiler:$roomVersion"
     api "androidx.room:room-ktx:$roomVersion"
+    api "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    api "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$loggingInterceptorVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

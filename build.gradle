@@ -64,4 +64,8 @@ ext {
     roomVersion = '2.2.5'
     rulesVersion = '1.0.1'
     truthVersion = '1.0'
+    mockkIoVersion = "1.9.3"
+    retrofitVersion = "2.6.0"
+    loggingInterceptorVersion = "3.8.0"
+    okhttpVersion = "3.9.0"
 }

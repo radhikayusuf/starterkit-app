@@ -1,5 +1,7 @@
 package id.radhika.lib.mvvm
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +19,13 @@ import kotlin.coroutines.CoroutineContext
  * Created by Radhika Yusuf Alifiansyah
  * on 21/Mar/2020
  **/
-abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D, *>, D : BaseDao>(
+abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D>, D : BaseDao>(
     private val viewBinder: (LayoutInflater) -> ViewBinding
 ) : Fragment(), CoroutineScope {
 
     private val job = SupervisorJob()
+    private var isHasCreated = false
+    val activity by lazy { requireActivity() as BaseActivity }
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
 
@@ -44,8 +48,11 @@ abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D, *>, D : BaseDao>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         launch {
-            vm.registerObserverToRender(this@BaseScreen, vm.getLiveDatas())
-            vm.onCreate()
+            vm.registerObserverToRender(this@BaseScreen)
+            if (!isHasCreated) {
+                vm.onCreate()
+                isHasCreated = true
+            }
         }
     }
 
@@ -59,6 +66,7 @@ abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D, *>, D : BaseDao>(
 
     override fun onDestroy() {
         super.onDestroy()
+        vm.unRegisterObserver(this@BaseScreen)
     }
 
     override fun onCreateView(
@@ -77,5 +85,28 @@ abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D, *>, D : BaseDao>(
     override fun onPause() {
         super.onPause()
         destroy()
+    }
+
+    open fun onBackPressed() {}
+
+    open fun onReceivedData(dataResult: Bundle?) {}
+
+    fun openScreen(screen: BaseScreen<*, *, *>, extras: Bundle? = null) {
+        activity.replaceScreen(screen, extras = extras)
+    }
+
+    fun openFreshScreen(screen: BaseScreen<*, *, *>, extras: Bundle? = null) {
+        activity.replaceScreen(screen, false, extras)
+    }
+
+    fun finishScreen(extras: Bundle? = null) {
+        activity.finishScreen(extras)
+    }
+
+    fun openActivity(from: Context, clazz: Class<*>, clear: Boolean = false){
+        Intent(from, clazz).let {
+            if (clear) it.flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(it)
+        }
     }
 }
