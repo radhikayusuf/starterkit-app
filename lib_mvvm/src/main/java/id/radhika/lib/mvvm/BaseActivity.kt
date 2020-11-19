@@ -18,6 +18,11 @@ abstract class BaseActivity : AppCompatActivity() {
     abstract fun frameLayoutId(): Int
 
     override fun onBackPressed() {
+        if (currentScreen?.isStubBackButton() == true) {
+            currentScreen?.onBackPressed()
+            return
+        }
+
         if (listOfScreen.isNotEmpty()) {
             listOfScreen.pop()
             if (listOfScreen.lastOrNull() != null) {
@@ -46,6 +51,10 @@ abstract class BaseActivity : AppCompatActivity() {
         }
         currentScreen = screen
         supportFragmentManager.replaceScreen(screen, frameLayoutId(), android.R.animator.fade_in, android.R.animator.fade_out)
+        currentScreen?.extras = extras
+        if (currentScreen?.isVisible() == true) {
+            currentScreen?.onResume()
+        }
     }
 
     fun finishScreen(extras: Bundle? = null) {
@@ -56,7 +65,10 @@ abstract class BaseActivity : AppCompatActivity() {
             if (screen != null) {
                 currentScreen = screen
                 supportFragmentManager.replaceScreen(screen, frameLayoutId(), android.R.animator.fade_in, android.R.animator.fade_out)
-                currentScreen?.onReceivedData(extras)
+                currentScreen?.extras = extras
+                if (currentScreen?.isVisible() == true) {
+                    currentScreen?.onResume()
+                }
             } else {
                 finish()
             }
