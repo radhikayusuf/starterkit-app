@@ -1,8 +1,10 @@
 package id.radhika.lib.mvvm
 
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import id.lesprivate.lib.ui.utils.NullableLiveDao
+import id.radhika.lib.mvvm.contract.ScreenContract
 import id.radhika.lib.mvvm.util.LiveDao
 import id.radhika.lib.mvvm.util.LiveListDao
 import id.radhika.lib.ui.utils.ComponentLiveDao
@@ -30,11 +32,13 @@ abstract class BaseVM<D : BaseDao>() : ViewModel(), CoroutineScope {
     abstract fun onCreateDao(): D
 
     internal fun registerObserverToRender(
-        screen: BaseScreen<*, *, D>
+        screen: Fragment
     ) {
         getLiveDatas().forEach {
             it.observe(screen, Observer {
-                screen.render().invoke(dao)
+                if (screen is ScreenContract<*>) {
+                    (screen.render() as ((data: D) -> Unit)).invoke(dao)
+                }
             })
         }
     }
@@ -50,9 +54,9 @@ abstract class BaseVM<D : BaseDao>() : ViewModel(), CoroutineScope {
             dao.javaClass.declaredFields
                 .filter {
                     LiveDao::class.java.isAssignableFrom(it.type) ||
-                    ComponentLiveDao::class.java.isAssignableFrom(it.type) ||
-                    NullableLiveDao::class.java.isAssignableFrom(it.type) ||
-                    LiveListDao::class.java.isAssignableFrom(it.type)
+                            ComponentLiveDao::class.java.isAssignableFrom(it.type) ||
+                            NullableLiveDao::class.java.isAssignableFrom(it.type) ||
+                            LiveListDao::class.java.isAssignableFrom(it.type)
                 }
                 .map { it.isAccessible = true; it.get(dao) as LiveData<*> }
         } catch (e: Exception) {

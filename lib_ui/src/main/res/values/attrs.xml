@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ButtonLoadingComp">
+        <attr name="text" format="string"/>
+        <attr name="allCaps" format="boolean"/>
+        <attr name="disabled" format="boolean"/>
+        <attr name="buttonBackground" format="reference"/>
+        <attr name="textSize" format="enum">
+            <enum name="small" value="14"/>
+            <enum name="medium" value="18"/>
+            <enum name="large" value="22"/>
+        </attr>
+
+        <attr name="type" format="enum">
+            <enum name="primary" value="1"/>
+            <enum name="secondary" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="LabelComp">
+        <attr name="labelType" format="enum">
+            <enum name="normal" value="0"/>
+            <enum name="link" value="1"/>
+            <enum name="linkUnderline" value="2"/>
+            <enum name="html" value="3"/>
+        </attr>
+        <attr name="ishtml" format="boolean"/>
+    </declare-styleable>
+</resources>

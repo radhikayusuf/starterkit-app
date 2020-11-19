@@ -11,6 +11,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import id.radhika.lib.mvvm.contract.ScreenContract
+import id.radhika.lib.mvvm.sheet.BaseSheetScreen
 import id.radhika.lib.mvvm.util.showToast
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -21,10 +23,11 @@ import kotlin.coroutines.CoroutineContext
  **/
 abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D>, D : BaseDao>(
     private val viewBinder: (LayoutInflater) -> ViewBinding
-) : Fragment(), CoroutineScope {
+) : Fragment(), CoroutineScope, ScreenContract<D> {
 
     private val job = SupervisorJob()
     private var isHasCreated = false
+    private var isViewCreated = false
     val activity by lazy { requireActivity() as BaseActivity }
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -38,10 +41,9 @@ abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D>, D : BaseDao>(
             getViewModel()
         )
     }
+    internal var extras: Bundle? = null
 
     abstract fun onViewReady()
-
-    abstract fun render(): (data: D) -> Unit
 
     abstract fun getViewModel(): Class<VM>
 
@@ -56,11 +58,16 @@ abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D>, D : BaseDao>(
         }
     }
 
+    override fun contextFragment() = requireContext()
+
     override fun onResume() {
         super.onResume()
         vm.registerToast(this) { msg, resMsg ->
             if (msg.isNotEmpty()) showToast(msg)
             else if (resMsg != -1) showToast(resMsg)
+        }
+        if (extras != null) {
+            onReceivedData(extras)
         }
     }
 
@@ -79,7 +86,11 @@ abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D>, D : BaseDao>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onViewReady()
+        if (!isViewCreated) {
+            onViewReady()
+            isViewCreated = true
+        }
+        onReceivedData(extras)
     }
 
     override fun onPause() {
@@ -89,24 +100,54 @@ abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D>, D : BaseDao>(
 
     open fun onBackPressed() {}
 
-    open fun onReceivedData(dataResult: Bundle?) {}
+    open fun onReceivedData(dataResult: Bundle?) {
+        extras = null
+    }
 
-    fun openScreen(screen: BaseScreen<*, *, *>, extras: Bundle? = null) {
+    override fun openScreen(screen: BaseScreen<*, *, *>, extras: Bundle?) {
         activity.replaceScreen(screen, extras = extras)
     }
 
-    fun openFreshScreen(screen: BaseScreen<*, *, *>, extras: Bundle? = null) {
+    override fun openFreshScreen(screen: BaseScreen<*, *, *>, extras: Bundle?) {
         activity.replaceScreen(screen, false, extras)
     }
 
-    fun finishScreen(extras: Bundle? = null) {
+    fun openSheetScreen(screen: BaseSheetScreen<*, *, *>) {
+        screen.show(childFragmentManager, "")
+    }
+
+    override fun finishScreen(extras: Bundle?) {
         activity.finishScreen(extras)
     }
 
-    fun openActivity(from: Context, clazz: Class<*>, clear: Boolean = false){
+    fun openActivity(from: Context, clazz: Class<*>, clear: Boolean = false, extras: Bundle? = null){
         Intent(from, clazz).let {
             if (clear) it.flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            extras?.let { b -> it.putExtras(b) }
             startActivity(it)
         }
     }
+
+    fun openActivity(intent: Intent, clear: Boolean = false){
+        if (clear) intent.flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+    }
+
+    fun openActivity(screen: BaseScreen<*, *, *>, clazz: Class<*>, clear: Boolean = false, extras: Bundle? = null){
+        Intent(screen.requireContext(), clazz).let {
+            if (clear) it.flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            extras?.let { b -> it.putExtras(b) }
+            startActivity(it)
+        }
+    }
+
+    fun openActivityForResult(screen: BaseScreen<*, *, *>, clazz: Class<*>, clear: Boolean = false, extras: Bundle? = null){
+        Intent(screen.requireContext(), clazz).let {
+            if (clear) it.flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            extras?.let { b -> it.putExtras(b) }
+            startActivityForResult(it, 0)
+        }
+    }
+
+    open fun isStubBackButton() = false
 }

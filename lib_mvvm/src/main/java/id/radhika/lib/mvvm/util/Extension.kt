@@ -8,6 +8,8 @@ import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentManager
 import id.radhika.lib.mvvm.BaseScreen
+import id.radhika.lib.mvvm.contract.ScreenContract
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,12 +27,21 @@ fun String.isEmail(): Boolean =
 fun String.isPassword(): Boolean =
     this.matches(Regex(StringConst.VALID_PASSWORD_REGEX))
 
-fun BaseScreen<*, *, *>.showToast(value: String, length: Int = Toast.LENGTH_SHORT) {
-    getContext()?.let { Toast.makeText(it, value, length).show() }
+fun String.isBaktiPassword(): Boolean =
+    this.length >= 6
+
+fun Double.toRupiah(): String {
+    val localeID = Locale("in", "ID")
+    val numberFormat = NumberFormat.getCurrencyInstance(localeID)
+    return numberFormat.format(this).toString()
 }
 
-fun BaseScreen<*, *, *>.showToast(@StringRes value: Int, length: Int = Toast.LENGTH_SHORT) {
-    getContext()?.let { Toast.makeText(it, value, length).show() }
+fun ScreenContract<*>.showToast(value: String, length: Int = Toast.LENGTH_SHORT) {
+    contextFragment().let { Toast.makeText(it, value, length).show() }
+}
+
+fun ScreenContract<*>.showToast(@StringRes value: Int, length: Int = Toast.LENGTH_SHORT) {
+    contextFragment()?.let { Toast.makeText(it, value, length).show() }
 }
 
 fun FragmentManager.replaceScreen(
@@ -58,9 +69,13 @@ fun FragmentManager.hideAll() {
     }.commit()
 }
 
-fun Long.convertLongToTime(): String {
+fun Long.convertLongToTime(output: String? = null): String {
     val date = Date(this)
-    val format = SimpleDateFormat.getDateTimeInstance()
+    val format = if (output != null) {
+        SimpleDateFormat(output, Locale("in", "ID"))
+    } else {
+        SimpleDateFormat.getDateTimeInstance()
+    }
     return format.format(date)
 }
 
@@ -71,4 +86,34 @@ fun currentTimeToLong(): Long {
 fun convertDateToLong(date: String): Long {
     val df = SimpleDateFormat("yyyy.MM.dd HH:mm")
     return df.parse(date).time
+}
+
+fun String.reformatDate(inputFormat: String, output: String? = null): String {
+    return try {
+        val df = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val date = Date(df.parse(this.replace("T", " ").replace("Z", " ")).time)
+        val format = if (output != null) {
+            SimpleDateFormat(output, Locale("in", "ID"))
+        } else {
+            SimpleDateFormat.getDateTimeInstance()
+        }
+        format.format(date)
+    } catch (e: Exception) {
+        this
+    }
+}
+
+fun String.fullDateToSimple(output: String? = null): String {
+    return try {
+        val df = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val date = Date(df.parse(this.replace("T", " ").replace("Z", " ")).time)
+        val format = if (output != null) {
+            SimpleDateFormat(output, Locale("in", "ID"))
+        } else {
+            SimpleDateFormat.getDateTimeInstance()
+        }
+        format.format(date)
+    } catch (e: Exception) {
+        this
+    }
 }

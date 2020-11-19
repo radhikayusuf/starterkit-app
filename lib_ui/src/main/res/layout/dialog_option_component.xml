@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/buttonClose"
+        style="@style/ClickableContent"
+        android:layout_width="@dimen/dimens_48dp"
+        android:layout_height="@dimen/dimens_48dp"
+        android:layout_gravity="end"
+        android:padding="@dimen/dimens_12dp"
+        android:src="@drawable/ic_baseline_close_24"
+        android:tint="@color/colorTextPrimary" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dimens_16dp">
+
+        <ImageView
+            android:id="@+id/imageContent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens_208dp"
+            android:layout_marginBottom="@dimen/dimens_16dp"
+            android:scaleType="centerInside"
+            android:visibility="gone" />
+
+        <id.radhika.lib.ui.component.LabelComp
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimens_16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/size_22sp"
+            android:textStyle="bold"
+            tools:text="Pendaftaran Berhasil" />
+
+        <id.radhika.lib.ui.component.LabelComp
+            android:id="@+id/subTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:letterSpacing="0.02"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="4"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/size_14sp"
+            tools:text="Selanjutnya kamu bisa masuk menggunakan akun yang baru saja kamu buat" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimens_16dp"
+            android:orientation="horizontal">
+
+            <id.radhika.lib.ui.component.LabelComp
+                android:id="@+id/buttonNegative"
+                style="@style/ClickableContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:background="@drawable/background_primary_button_positive"
+                android:gravity="center"
+                android:paddingStart="@dimen/dimens_16dp"
+                android:paddingTop="@dimen/dimens_8dp"
+                android:paddingEnd="@dimen/dimens_16dp"
+                android:paddingBottom="@dimen/dimens_8dp"
+                android:text="TIDAK"
+                android:textColor="@color/colorWhite" />
+
+            <View
+                android:layout_width="@dimen/dimens_16dp"
+                android:layout_height="@dimen/dimens_1dp" />
+
+            <id.radhika.lib.ui.component.LabelComp
+                android:id="@+id/buttonPositive"
+                style="@style/ClickableContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:background="@drawable/background_primary_button_negative"
+                android:gravity="center"
+                android:paddingStart="@dimen/dimens_16dp"
+                android:paddingTop="@dimen/dimens_8dp"
+                android:paddingEnd="@dimen/dimens_16dp"
+                android:paddingBottom="@dimen/dimens_8dp"
+                android:text="YA"
+                android:textColor="@color/colorRed" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

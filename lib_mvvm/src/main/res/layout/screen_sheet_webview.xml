@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="@dimen/dimens_16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <id.radhika.lib.ui.component.ToolbarComp
+            android:id="@+id/toolbarWebView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/frameBrowser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/progressWeb"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimens_6dp"
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
+                    android:progressTint="@color/colorWarmOrange"
+                    tools:progress="50" />
+
+                <WebView
+                    android:id="@+id/webViewContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/frameTextRich"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <id.radhika.lib.ui.component.BannerComp
+                        android:id="@+id/imageContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dimens_16dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        app:riv_corner_radius="@dimen/dimens_8dp"
+                        tools:src="@drawable/promo_card" />
+
+                    <id.radhika.lib.ui.component.LabelComp
+                        android:id="@+id/labelTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/size_20sp"
+                        android:textStyle="bold"
+                        android:lineSpacingExtra="@dimen/dimens_6dp"
+                        android:padding="@dimen/dimens_16dp" />
+
+                    <id.radhika.lib.ui.component.LabelComp
+                        android:id="@+id/labelSubTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/size_16sp"
+                        android:lineSpacingExtra="@dimen/dimens_6dp"
+                        android:padding="@dimen/dimens_16dp" />
+
+                    <id.radhika.lib.ui.component.LabelComp
+                        android:id="@+id/labelSheet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="@dimen/dimens_6dp"
+                        android:padding="@dimen/dimens_16dp" />
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+        </FrameLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
