@@ -20,9 +20,7 @@ class HomeVM(
 
     private suspend fun fetchData() {
         dao.isLoading = true
-
         delay(5000)
-
         homeUseCase.getHomeData().let {
             if (it.isSuccess) {
                 dao.name = it.data ?: ""
@@ -36,7 +34,7 @@ class HomeVM(
     }
 
     fun calculate(inc: Boolean) = launch {
-        delay(1000)
+        delay(300)
         dao.count += if (inc) 1 else -1
     }
 }

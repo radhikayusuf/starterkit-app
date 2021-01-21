@@ -80,7 +80,7 @@ class WebViewSheetScreen :
         }
     }
 
-    override fun render() = { data: WebViewSheetDao -> }
+    override fun render() = { data: WebViewSheetDao, group: String -> }
 
     override fun getViewModel() = WebViewSheetVM::class.java
 

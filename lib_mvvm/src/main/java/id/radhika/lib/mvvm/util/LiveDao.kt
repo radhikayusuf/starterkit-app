@@ -6,13 +6,14 @@ import androidx.lifecycle.LiveData
  * Created by Radhika Yusuf Alifiansyah
  * on 02/Apr/2020
  **/
-class LiveDao<T>(private val defValue: T) : LiveData<T>() {
+class LiveDao<T>(private val defValue: T, override val groupName: String = "") : LiveData<T>(), GroupableLivedao {
 
     var content: T = defValue
-        get() = value ?: defValue
         set(param) {
-            field = param
-            postValue(param!!)
+            param?.let {
+                field = it
+                postValue(it)
+            }
         }
 
     override fun postValue(value: T) {

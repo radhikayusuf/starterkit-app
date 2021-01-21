@@ -13,7 +13,7 @@ interface ScreenContract<D :BaseDao> {
 
     fun contextFragment(): Context
 
-    fun render(): (data: D) -> Unit
+    fun render(): (data: D, group: String) -> Unit
 
     fun openScreen(screen: BaseScreen<*, *, *>, extras: Bundle? = null)
 

@@ -1,17 +1,22 @@
-package id.lesprivate.lib.ui.utils
+package id.radhika.lib.mvvm.util
 
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Created by Radhika Yusuf Alifiansyah
  * on 02/Apr/2020
  **/
-class NullableLiveDao<T>(private val defValue: T?) : LiveData<T>() {
+class NullableLiveDao<T>(
+    private val defValue: T?,
+    override val groupName: String = ""
+) : LiveData<T>(), GroupableLivedao {
 
     var hasValueBefore = false
 
     var content: T? = defValue
-        get() = value ?: defValue
         set(param) {
             hasValueBefore = true
             field = param

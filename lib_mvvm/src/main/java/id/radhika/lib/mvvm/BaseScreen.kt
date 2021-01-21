@@ -62,6 +62,7 @@ abstract class BaseScreen<B : ViewBinding, VM : BaseVM<D>, D : BaseDao>(
 
     override fun onResume() {
         super.onResume()
+        vm.registerCloseScreen(this) { finishScreen() }
         vm.registerToast(this) { msg, resMsg ->
             if (msg.isNotEmpty()) showToast(msg)
             else if (resMsg != -1) showToast(resMsg)
